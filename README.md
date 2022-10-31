@@ -132,7 +132,10 @@ Connect to Database target.
     ```
     You may also use Boundary Desktop to view targets you are authorized to access based on your role.
     - Open Boundary Desktop
-    - Enter Boundary Cluster URL. You can retreive the URL by running `terraform output -raw hcp_boundary_cluster_url` command
+    - Enter Boundary Cluster URL. You can retreive the URL by running below  command
+        ```
+        terraform output -raw hcp_boundary_cluster_url
+        ```
     - Select `demo-org` from "Choose a different scope" dropdown. 
     - Click "Sign In" to login using your OIDC user credentials.
 
