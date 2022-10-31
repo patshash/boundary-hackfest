@@ -94,6 +94,18 @@ Verify following resources are created in Boundary:
     - Click "Credentials"
     - Verify `static_db_creds` record exists
 
+## Add below variable to .envrc
+```sh
+export BOUNDARY_ADDR=$(terraform output -raw hcp_boundary_cluster_url)
+export AUTH_ID=$(boundary auth-methods list -format json | jq ".items[].id" -r)
+export BOUNDARY_AUTHENTICATE_PASSWORD_PASSWORD=$TF_VAR_hcp_boundary_password
+boundary authenticate password -auth-method-id=$AUTH_ID -login-name=admin -password env://BOUNDARY_AUTHENTICATE_PASSWORD_PASSWORD
+export ORG_ID=$(boundary scopes list -recursive -format json | jq '.items[] | select(.scope.type=="global") | .id' -r)
+export PROJECT_ID=$(boundary scopes list -recursive -format json | jq '.items[] | select(.scope.type=="org") | .id' -r)
+export OAUTH_ID=$(boundary auth-methods list -scope-id=$ORG_ID -format json | jq ".items[].id" -r)
+export BOUNDARY_CONNECT_TARGET_SCOPE_ID=$PROJECT_ID
+```
+
 ## Setup Vault Credential Store
 ```
 terraform apply -target module.vault-credstore -auto-approve
