@@ -4,6 +4,9 @@
 - [HCP service principal credentials](https://registry.terraform.io/providers/hashicorp/hcp/latest/docs/guides/auth)
 - [Auth0 Account](https://auth0.com/signup)
 - [Auth0 Machine-Machine client application](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/quickstart)
+- [Boundary CLI](https://developer.hashicorp.com/boundary/tutorials/hcp-getting-started/hcp-getting-started-install?in=boundary%2Fhcp-getting-started)
+- [Boundary Desktop (Optional)](https://developer.hashicorp.com/boundary/tutorials/hcp-getting-started/hcp-getting-started-desktop-app)
+- Microsoft Remote Desktop
 
 # Export following variables in .envrc file
 ```sh
@@ -127,6 +130,12 @@ Connect to Database target.
     ```sh
     boundary targets list -scope-id $PROJECT_ID
     ```
+    You may also use Boundary Desktop to view targets you are authorized to access based on your role.
+    - Open Boundary Desktop
+    - Enter Boundary Cluster URL. You can retreive the URL by running `terraform output -raw hcp_boundary_cluster_url` command
+    - Select `demo-org` from "Choose a different scope" dropdown. 
+    - Click "Sign In" to login using your OIDC user credentials.
+
 - Connect to the target
     ```sh
     # If login as admin
@@ -148,6 +157,7 @@ Connect to Database target.
     postgres=> insert into country values ('JP', 'Japan');
     ERROR:  permission denied for table country
     ```
+
 
 
 ## Setup SSH Target
