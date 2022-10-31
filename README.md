@@ -18,9 +18,17 @@ export TF_VAR_user_password=<auth0_user_password>
 export TF_VAR_rds_username=<rds_username>
 export TF_VAR_rds_password=<rds_password>
 ```
+## Clone this repo to your local machine
+```sh
+git clone https://github.com/panchal-ravi/boundary-hackfest.git
+```
 
 ## Setup HCP Boundary Cluster
 ```sh
+cd <cloned-directory>
+./setup.sh
+terraform init
+terraform validate
 terraform apply -target module.boundary-cluster -auto-approve
 ```
 This step creates and configures several resources mentioned below.
