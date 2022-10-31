@@ -6,6 +6,7 @@
 - [Auth0 Machine-Machine client application](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/quickstart)
 
 # Export following variables in .envrc file
+```sh
 export TF_VAR_hcp_client_id=<hcp_client_id>
 export TF_VAR_hcp_client_secret=<hcp_client_secret>
 export TF_VAR_auth0_domain=<auth0_domain>
@@ -16,6 +17,7 @@ export TF_VAR_hcp_boundary_password=<hcp_boundary_password>
 export TF_VAR_user_password=<auth0_user_password>
 export TF_VAR_rds_username=<rds_username>
 export TF_VAR_rds_password=<rds_password>
+```
 
 ## Setup HCP Boundary Cluster
 ```sh
