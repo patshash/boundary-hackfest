@@ -21,11 +21,18 @@ export TF_VAR_rds_password=<rds_password>
 ## Clone this repo to your local machine
 ```sh
 git clone https://github.com/panchal-ravi/boundary-hackfest.git
+cd <cloned-directory>
+```
+
+## Build HCP Boundary self-managed worker image using packer
+```sh
+cd amis/boundary
+# Verify region is set correctly in variables.pkrvars.hcl file
+packer build -var-file="variables.pkrvars.hcl"
 ```
 
 ## Setup HCP Boundary Cluster
 ```sh
-cd <cloned-directory>
 ./setup.sh
 terraform init
 terraform validate
