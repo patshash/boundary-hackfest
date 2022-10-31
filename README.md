@@ -206,7 +206,7 @@ To connect to the target Windows server using RDP, follow below steps:
     - Copy the password
 - Create static credential library in Boundary
     - Go to "Demo Org" > "IT Support" project
-    - Go to "Credential Stores" > "boundary-cred-store"
+    - Go to "Credential Stores" > `boundary-cred-store`
     - Click "Credentials"
     - Click "Manage > New Credential"
     - Provide below details and Click "Save"
@@ -217,15 +217,15 @@ To connect to the target Windows server using RDP, follow below steps:
 - Assign static credential to Windows targets in Boundary
     - Go to "Demo Org" > "IT Support" project
     - Click "Targets" in the left panel
-    - Click "windows_admin" 
+    - Click `windows_admin` 
     - Click "Brokered Credentials"
     - Click "Manage > Add Brokered Credentials"
-    - Select "static_windows_creds" and click "Add Brokered Credentials"
+    - Select `static_windows_creds` and click "Add Brokered Credentials"
     - Click "Targets" in the left panel
-    - Click "windows_analyst" 
+    - Click `windows_analyst` 
     - Click "Brokered Credentials"
     - Click "Manage > Add Brokered Credentials"
-    - Select "static_windows_creds" and click "Add Brokered Credentials"
+    - Select `static_windows_creds` and click "Add Brokered Credentials"
  - Connect to Windows target
     - If using Mac, install "Microsoft Remote Desktop" from the App Store
     - Login to Boundary as admin or analyst role
