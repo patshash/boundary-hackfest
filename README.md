@@ -57,7 +57,7 @@ This step creates and configures several resources mentioned below.
     - Verify the self-managed boundary worker has started and registered successfully
     - Run `terraform output` to view the Worker public IP.
         ```sh
-        ssh -i ./generaged/ssh-key ubuntu@<worker-ip>
+        ssh -i ./generated/ssh-key ubuntu@<worker-ip>
         systemctl status boundary-worker
         journalctl -flu boundary-worker
         ```
