@@ -31,7 +31,7 @@ cd <cloned-directory>
 ```sh
 cd amis/boundary
 # Verify region is set correctly in variables.pkrvars.hcl file
-packer build -var-file="variables.pkrvars.hcl"
+packer build -var-file="variables.pkrvars.hcl" .
 ```
 
 ## Setup HCP Boundary Cluster
