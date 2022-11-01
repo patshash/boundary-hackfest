@@ -52,7 +52,7 @@ This step creates and configures several resources mentioned below.
     - Self-managed Vault instance should be up and running. 
     - Run `terraform output` to view the Vault public IP. 
     - Vault root token should be available in `./generated/vault-token` file
-    - Open browser and enter http://<vault-ip>:8200. Verify you are able to login using the root token.
+    - Open browser and enter `http://<vault-ip>:8200`. Verify you are able to login using the root token.
 - Self-managed worker:
     - Verify the self-managed boundary worker has started and registered successfully
     - Run `terraform output` to view the Worker public IP.
