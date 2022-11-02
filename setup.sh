@@ -1,4 +1,9 @@
 DATETIME=$(date +'%d%m%Y_%H%M%S')
+
+if [ ! -d "./generated" ]; then
+  mkdir ./generated
+fi
+
 cp ./generated/auth_request_token ./generated/auth_request_token_$DATETIME 
 echo '' > ./generated/auth_request_token 
 cp ./generated/k8s_auth_request_token ./generated/k8s_auth_request_token_$DATETIME 
