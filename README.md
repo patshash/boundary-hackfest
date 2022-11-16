@@ -297,22 +297,7 @@ This step should setup and configure below resources:
         - Targets: `eks_postgres_admin` with static credentials brokered by boundary static credential library
     - Vault Credential Library: `eks_token_readonly`
 
-Connect to Database target running as Kubernetes pod.
-- Login to Boundary as admin.
-    ```sh
-    boundary authenticate oidc -auth-method-id=$OAUTH_ID
-    ```
-- List available targets for the logged in user
-    ```sh
-    boundary targets list -scope-id $PROJECT_ID
-    ```
-- Connect to the target
-    ```sh
-    boundary connect postgres -target-name eks_postgres_admin -dbname postgres
-    ```
-    Boundary would connect to postgres database with static database credentials brokered by Boundary credential store.
-
-Connect to Database target running as Kubernetes pod.
+### Connect to Database target running as Kubernetes pod.
 - Login to Boundary as admin.
     ```sh
     boundary authenticate oidc -auth-method-id=$OAUTH_ID
@@ -328,7 +313,7 @@ Connect to Database target running as Kubernetes pod.
     Boundary would connect to postgres database with static database credentials brokered by Boundary credential store.
 
 
-Connect to EKS Cluster target
+### Connect to EKS Cluster target
 - Login to Boundary as analyst.
     ```sh
     boundary authenticate oidc -auth-method-id=$OAUTH_ID
