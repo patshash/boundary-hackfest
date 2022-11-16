@@ -17,7 +17,13 @@ variable "aws_keypair_keyname" {
 variable "owner" {
   type = string
 }
+variable "vault_credstore_id" {
+  type = string
+}
 variable "static_db_creds_id" {
+  type = string
+}
+variable "managed_group_analyst_id" {
   type = string
 }
 variable "managed_group_admin_id" {

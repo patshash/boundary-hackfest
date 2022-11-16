@@ -54,10 +54,92 @@ data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
 }
 
+resource "kubernetes_namespace" "test" {
+  metadata {
+    name = "test"
+  }
+}
+
+resource "kubernetes_namespace" "vault" {
+  metadata {
+    name = "vault"
+  }
+}
+
+resource "kubernetes_service_account_v1" "vault" {
+  metadata {
+    name      = "vault"
+    namespace = "vault"
+  }
+}
+
+
+resource "kubernetes_cluster_role_v1" "vault_role" {
+  metadata {
+    name = "k8s-full-secrets-abilities-with-labels"
+  }
+
+  rule {
+    api_groups = [""]
+    resources  = ["namespaces"]
+    verbs      = ["get"]
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["serviceaccounts", "serviceaccounts/token"]
+    verbs      = ["create", "update", "delete"]
+  }
+  rule {
+    api_groups = ["rbac.authorization.k8s.io"]
+    resources  = ["rolebindings", "clusterrolebindings"]
+    verbs      = ["create", "update", "delete"]
+  }
+  rule {
+    api_groups = ["rbac.authorization.k8s.io"]
+    resources  = ["roles", "clusterroles"]
+    verbs      = ["bind", "escalate", "create", "update", "delete"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding_v1" "vault_role_binding" {
+  metadata {
+    name = "k8s-full-secrets-abilities-with-labels"
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "k8s-full-secrets-abilities-with-labels"
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = "${kubernetes_service_account_v1.vault.metadata.0.name}"
+    namespace = "${kubernetes_service_account_v1.vault.metadata.0.namespace}"
+  }
+}
+
+data "kubernetes_secret_v1" "vault" {
+  metadata {
+    name = "${kubernetes_service_account_v1.vault.default_secret_name}"
+    namespace = "${kubernetes_service_account_v1.vault.metadata.0.namespace}"
+  }
+}
+
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
   token                  = data.aws_eks_cluster_auth.cluster.token
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+}
+
+resource "local_file" "vault_k8s_token" {
+  filename = "${path.root}/generated/vault-k8s-token"
+  content = "${data.kubernetes_secret_v1.vault.data.token}"
+}
+
+resource "local_file" "k8s_ca_cert" {
+  filename = "${path.root}/generated/k8s_ca.crt"
+  content = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
 }
 
 resource "null_resource" "kubeconfig" {

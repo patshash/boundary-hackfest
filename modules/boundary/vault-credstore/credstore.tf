@@ -1,5 +1,5 @@
 resource "vault_token" "boundary" {
-  policies = [vault_policy.boundary-controller.name, vault_policy.db-read.name, vault_policy.kv-read.name]
+  policies = [vault_policy.boundary-controller.name, vault_policy.db-read.name, vault_policy.kv-read.name, vault_policy.k8s-roles.name]
 
   no_parent         = true
   no_default_policy = true

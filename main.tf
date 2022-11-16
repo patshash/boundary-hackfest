@@ -91,21 +91,23 @@ module "rdp-target" {
 }
 
 module "k8s-target" {
-  source                 = "./modules/boundary/targets/k8s-target"
-  deployment_id          = local.deployment_id
-  vpc_id                 = module.boundary-cluster.vpc_id
-  vpc_cidr               = module.boundary-cluster.vpc_cidr_block
-  region                 = var.aws_region
-  private_subnets        = module.boundary-cluster.private_subnets
-  aws_keypair_keyname    = module.boundary-cluster.aws_keypair_keyname
-  static_db_creds_id     = module.boundary-resources.static_db_creds_id
-  org_id                 = module.boundary-resources.org_id
-  project_id             = module.boundary-resources.project_id
-  managed_group_admin_id = module.boundary-resources.managed_group_admin_id
-  db_username            = var.hcp_boundary_admin
-  db_password            = var.hcp_boundary_password
-  hcp_boundary_address   = module.boundary-cluster.hcp_boundary_cluster_url
-  hcp_boundary_admin     = var.hcp_boundary_admin
-  hcp_boundary_password  = var.hcp_boundary_password
-  owner                  = var.owner
+  source                   = "./modules/boundary/targets/k8s-target"
+  deployment_id            = local.deployment_id
+  vpc_id                   = module.boundary-cluster.vpc_id
+  vpc_cidr                 = module.boundary-cluster.vpc_cidr_block
+  region                   = var.aws_region
+  private_subnets          = module.boundary-cluster.private_subnets
+  aws_keypair_keyname      = module.boundary-cluster.aws_keypair_keyname
+  static_db_creds_id       = module.boundary-resources.static_db_creds_id
+  org_id                   = module.boundary-resources.org_id
+  project_id               = module.boundary-resources.project_id
+  vault_credstore_id       = module.vault-credstore.vault_credstore_id
+  managed_group_admin_id   = module.boundary-resources.managed_group_admin_id
+  managed_group_analyst_id = module.boundary-resources.managed_group_analyst_id
+  db_username              = var.hcp_boundary_admin
+  db_password              = var.hcp_boundary_password
+  hcp_boundary_address     = module.boundary-cluster.hcp_boundary_cluster_url
+  hcp_boundary_admin       = var.hcp_boundary_admin
+  hcp_boundary_password    = var.hcp_boundary_password
+  owner                    = var.owner
 }

@@ -53,3 +53,13 @@ path "db/creds/analyst" {
 }
 EOT
 }
+
+resource "vault_policy" "k8s-roles" {
+  name = "k8s-roles"
+
+  policy = <<EOT
+path "kubernetes/creds/my-role" {
+  capabilities = ["read", "update", "create"]
+}
+EOT
+}

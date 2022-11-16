@@ -10,7 +10,7 @@ resource "kubernetes_config_map" "config" {
     })}"
   }
 }
-
+/*
 resource "kubernetes_deployment_v1" "deployment" {
   metadata {
     name = "boundary-worker-k8s"
@@ -53,6 +53,79 @@ resource "kubernetes_deployment_v1" "deployment" {
             mount_path = "/etc/boundary"
             name       = "boundary-config"
           }
+          volume_mount {
+            mount_path = "/home/boundary"
+            name       = "worker"
+          }
+          security_context {
+            privileged = true
+          }
+        }
+        volume {
+          name = "boundary-config"
+          config_map {
+            name = "boundary-k8s-worker-config"
+          }
+        }
+        volume {
+          name = "worker"
+          persistent_volume_claim {
+            claim_name = "worker-pv-claim"
+          }
+        }
+      }
+    }
+  }
+}
+*/
+
+resource "kubernetes_stateful_set_v1" "statefulset" {
+  metadata {
+    name = "boundary-worker-k8s"
+    labels = {
+      app       = "boundary",
+      component = "worker",
+      env       = "k8s"
+    }
+  }
+
+  spec {
+    replicas = 1
+    service_name = "boundary-k8s-worker-svc"
+
+    selector {
+      match_labels = {
+        app       = "boundary",
+        component = "worker",
+        env       = "k8s"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app       = "boundary",
+          component = "worker",
+          env       = "k8s"
+        }
+      }
+
+      spec {
+        container {
+          image   = "hashicorp/boundary-worker-hcp:0.11-hcp"
+          name    = "boundary-worker"
+          command = ["boundary-worker", "server", "-config", "/etc/boundary/boundary-worker.hcl"]
+          port {
+            container_port = 9202
+          }
+          volume_mount {
+            mount_path = "/etc/boundary"
+            name       = "boundary-config"
+          }
+          volume_mount {
+            mount_path = "/home/boundary"
+            name       = "worker-data"
+          }
           security_context {
             privileged = true
           }
@@ -65,8 +138,22 @@ resource "kubernetes_deployment_v1" "deployment" {
         }
       }
     }
+    volume_claim_template {
+      metadata {
+        name = "worker-data"
+      }
+      spec {
+        access_modes       = ["ReadWriteOnce"]
+        resources {
+          requests = {
+            storage = "5Gi"
+          }
+        }
+      }
+    }
   }
 }
+
 
 resource "kubernetes_service_v1" "service" {
   metadata {
@@ -100,6 +187,27 @@ resource "null_resource" "register_k8s_worker" {
   }
 
   depends_on = [
-    kubernetes_deployment_v1.deployment
+    kubernetes_stateful_set_v1.statefulset
+    /* kubernetes_deployment_v1.deployment */
   ]
 }
+/*
+resource "kubernetes_persistent_volume_claim_v1" "boundary_worker_pv_claim" {
+  metadata {
+    name = "worker-pv-claim"
+    labels = {
+      app       = "boundary",
+      component = "worker",
+      env       = "k8s"
+    }
+  }
+  spec {
+    access_modes       = ["ReadWriteOnce"]
+    resources {
+      requests = {
+        storage = "5Gi"
+      }
+    }
+  }
+}
+*/
