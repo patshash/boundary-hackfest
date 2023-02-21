@@ -48,7 +48,7 @@ resource "boundary_target" "eks_postgres_admin" {
   scope_id                 = var.project_id
   session_connection_limit = -1
   default_port             = 5432
-  worker_filter            = "\"eks\" in \"/tags/type\""
+  ingress_worker_filter    = "\"eks\" in \"/tags/type\""
   host_source_ids = [
     boundary_host_set_static.eks_db_servers.id
   ]
@@ -65,7 +65,7 @@ resource "boundary_target" "eks_readonly" {
   scope_id                 = var.project_id
   session_connection_limit = -1
   default_port             = 443
-  worker_filter            = "\"worker\" in \"/tags/type\""
+  ingress_worker_filter    = "\"ingress\" in \"/tags/type\""
   host_source_ids = [
     boundary_host_set_static.eks_cluster.id
   ]
@@ -98,7 +98,7 @@ resource "boundary_role" "db_admin" {
     "id=*;type=target;actions=list,no-op",
     "id=*;type=auth-token;actions=list,read:self,delete:self"
   ]
-  principal_ids = [var.managed_group_admin_id]
+  principal_ids = [var.auth0_managed_group_admin_id, var.okta_managed_group_admin_id]
 }
 
 resource "boundary_role" "eks_readonly" {
@@ -111,5 +111,5 @@ resource "boundary_role" "eks_readonly" {
     "id=*;type=target;actions=list,no-op",
     "id=*;type=auth-token;actions=list,read:self,delete:self"
   ]
-  principal_ids = [var.managed_group_analyst_id]
+  principal_ids = [var.auth0_managed_group_analyst_id, var.okta_managed_group_analyst_id]
 }

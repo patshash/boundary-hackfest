@@ -6,11 +6,11 @@ terraform {
     }
     boundary = {
       source  = "hashicorp/boundary"
-      version = "1.1.1"
+      version = "1.1.4"
     }
     hcp = {
       source  = "hashicorp/hcp"
-      version = "0.47.0"
+      version = "0.54.0"
     }
     vault = {
       source  = "hashicorp/vault"
@@ -29,8 +29,9 @@ provider "aws" {
 }
 
 provider "vault" {
-  address = "http://${module.boundary-cluster.vault_ip}:8200"
-  token = trimspace(file("${path.root}/generated/vault-token"))
+  address = "http://127.0.0.1:8200"
+  token = trimspace(file("${path.root}/generated/vault_token"))
+  /* address = "http://${module.boundary-cluster.vault_ip}:8200" */
 }
 
 provider "boundary" {

@@ -63,3 +63,17 @@ path "kubernetes/creds/my-role" {
 }
 EOT
 }
+
+resource "vault_policy" "boundary-client" {
+  name = "boundary-client"
+
+  policy = <<EOT
+path "ssh-client-signer/issue/boundary-client" {
+  capabilities = ["create", "update"]
+}
+
+path "ssh-client-signer/sign/boundary-client" {
+  capabilities = ["create", "update"]
+}
+EOT
+}

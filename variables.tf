@@ -98,3 +98,11 @@ variable "rdp_username" {
 variable "rdp_password" {
   type = string
 } */
+variable "okta_api_token" {
+}
+variable "okta_base_url" {
+}
+variable "okta_org_name" {
+}
+variable "okta_domain" {
+}

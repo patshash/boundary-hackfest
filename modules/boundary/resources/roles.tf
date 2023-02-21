@@ -34,7 +34,9 @@ resource "boundary_role" "default_org" {
     "id=${boundary_scope.project.id};actions=read",
     "id=*;type=auth-token;actions=list,read:self,delete:self"
   ]
-  principal_ids = [boundary_managed_group.db_analyst.id, boundary_managed_group.db_admin.id]
+  principal_ids = [boundary_managed_group.auth0_db_analyst.id, boundary_managed_group.auth0_db_admin.id,
+    boundary_managed_group.okta_db_analyst.id, boundary_managed_group.okta_db_admin.id
+  ]
 }
 
 resource "boundary_role" "default_project" {
@@ -45,5 +47,7 @@ resource "boundary_role" "default_project" {
     "id=*;type=session;actions=list,no-op",
     "id=*;type=session;actions=read:self,cancel:self",
   ]
-  principal_ids = [boundary_managed_group.db_analyst.id, boundary_managed_group.db_admin.id]
+  principal_ids = [boundary_managed_group.auth0_db_analyst.id, boundary_managed_group.auth0_db_admin.id,
+    boundary_managed_group.okta_db_analyst.id, boundary_managed_group.okta_db_admin.id
+  ]
 }

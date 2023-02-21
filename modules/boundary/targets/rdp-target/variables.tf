@@ -20,10 +20,16 @@ variable "owner" {
 variable "vault_credstore_id" {
   type = string
 }
-variable "managed_group_analyst_id" {
+variable "auth0_managed_group_analyst_id" {
   type = string
 }
-variable "managed_group_admin_id" {
+variable "auth0_managed_group_admin_id" {
+  type = string
+}
+variable "okta_managed_group_analyst_id" {
+  type = string
+}
+variable "okta_managed_group_admin_id" {
   type = string
 }
 variable "project_id" {
@@ -36,5 +42,11 @@ variable "credlib_vault_db_admin_id" {
   type = string
 }
 variable "credlib_vault_db_analyst_id" {
+  type = string
+}
+variable "static_credstore_id" {
+  type = string
+}
+variable "worker_egress_security_group_id" {
   type = string
 }

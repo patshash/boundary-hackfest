@@ -2,8 +2,8 @@ resource "aws_instance" "vault" {
   ami                    = data.aws_ami.an_image.id
   instance_type          = var.instance_type
   key_name               = aws_key_pair.this.key_name
-  subnet_id              = element(module.vpc.public_subnets, 0)
   vpc_security_group_ids = [module.vault-inbound-sg.security_group_id]
+  subnet_id              = element(module.vpc.private_subnets, 0)
 
   tags = {
     Name  = "${var.deployment_id}-vault"
@@ -40,19 +40,26 @@ resource "aws_instance" "vault" {
       "export VAULT_ADDR=http://127.0.0.1:8200",
       "sudo -E vault operator init -n 1 -t 1 -format=json > /home/ubuntu/init.json",
       "sudo -E vault operator unseal \"`jq -r '.unseal_keys_b64[0]' init.json`\"",
-      "sudo jq -r .root_token init.json > /home/ubuntu/vault-token",
+      "sudo jq -r .root_token init.json > /home/ubuntu/vault_token",
       "echo \".................................Done setup.........................................\""
     ]
   }
 
   provisioner "local-exec" {
-    command = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${path.root}/generated/${local.key_name} ubuntu@${self.public_ip}:/home/ubuntu/vault-token ./generated/"
+    command = <<-EOT
+      ssh -o StrictHostKeyChecking=no -i ${path.root}/generated/${local.key_name} ubuntu@${aws_instance.boundary-worker-ingress.public_ip} "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/ubuntu/ssh_key ubuntu@${self.private_ip}:/home/ubuntu/vault_token /home/ubuntu/vault_token"  
+      scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${path.root}/generated/${local.key_name} ubuntu@${aws_instance.boundary-worker-ingress.public_ip}:/home/ubuntu/vault_token ./generated/
+      EOT
   }
 
   connection {
-    host        = self.public_ip
+    bastion_host        = aws_instance.boundary-worker-ingress.public_ip
+    bastion_user        = "ubuntu"
+    agent               = false
+    bastion_private_key = tls_private_key.ssh.private_key_openssh
+
+    host        = self.private_ip
     user        = "ubuntu"
-    agent       = false
     private_key = tls_private_key.ssh.private_key_openssh
   }
 
@@ -61,4 +68,3 @@ resource "aws_instance" "vault" {
     local_file.private_key
   ]
 }
-

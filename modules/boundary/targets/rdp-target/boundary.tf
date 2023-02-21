@@ -28,7 +28,7 @@ resource "boundary_role" "windows_admin" {
     "id=*;type=target;actions=list,no-op",
     "id=*;type=auth-token;actions=list,read:self,delete:self"
   ]
-  principal_ids = [var.managed_group_admin_id]
+  principal_ids = [var.auth0_managed_group_admin_id, var.okta_managed_group_admin_id]
 }
 
 resource "boundary_role" "windows_analyst" {
@@ -41,9 +41,8 @@ resource "boundary_role" "windows_analyst" {
     "id=*;type=target;actions=list,no-op",
     "id=*;type=auth-token;actions=list,read:self,delete:self"
   ]
-  principal_ids = [var.managed_group_analyst_id]
+  principal_ids = [var.auth0_managed_group_analyst_id, var.okta_managed_group_analyst_id]
 }
-
 
 resource "boundary_target" "windows_admin" {
   type                     = "tcp"
@@ -52,13 +51,14 @@ resource "boundary_target" "windows_admin" {
   scope_id                 = var.project_id
   session_connection_limit = -1
   default_port             = 3389
-  worker_filter            = "\"worker\" in \"/tags/type\""
+  ingress_worker_filter    = "\"ingress\" in \"/tags/type\""
+  egress_worker_filter     = "\"egress\" in \"/tags/type\""
   host_source_ids = [
     boundary_host_set_static.windows_servers.id
   ]
 
   brokered_credential_source_ids = [
-    var.credlib_vault_db_admin_id
+    var.credlib_vault_db_admin_id, boundary_credential_username_password.static_win_creds.id
   ]
 
 }
@@ -70,13 +70,22 @@ resource "boundary_target" "windows_analyst" {
   scope_id                 = var.project_id
   session_connection_limit = -1
   default_port             = 3389
-  worker_filter            = "\"worker\" in \"/tags/type\""
+  ingress_worker_filter    = "\"ingress\" in \"/tags/type\""
+  egress_worker_filter     = "\"egress\" in \"/tags/type\""
   host_source_ids = [
     boundary_host_set_static.windows_servers.id
   ]
 
   brokered_credential_source_ids = [
-    var.credlib_vault_db_analyst_id
+    var.credlib_vault_db_analyst_id, boundary_credential_username_password.static_win_creds.id
   ]
 
+}
+
+resource "boundary_credential_username_password" "static_win_creds" {
+  name                = "static_windows_creds"
+  description         = "Windows credentials"
+  credential_store_id = var.static_credstore_id
+  username            = "Administrator"
+  password            = rsadecrypt(aws_instance.windows.password_data, file("${path.root}/generated/rsa_key"))
 }

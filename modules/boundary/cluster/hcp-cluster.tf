@@ -8,7 +8,7 @@ resource "null_resource" "auth_method_id" {
   provisioner "local-exec" {
     command = "curl -s ${hcp_boundary_cluster.this.cluster_url}/v1/auth-methods?scope_id=global | jq \".items[].id\" -r > ${path.root}/generated/global_auth_method_id"
   }
-
+  
   provisioner "local-exec" {
     command = "echo ${hcp_boundary_cluster.this.cluster_url} | awk -F'/' '{print $3}' | awk -F'.' '{print $1}' > ${path.root}/generated/boundary_cluster_id"
   }

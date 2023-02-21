@@ -119,6 +119,7 @@ resource "kubernetes_cluster_role_binding_v1" "vault_role_binding" {
   }
 }
 
+
 data "kubernetes_secret_v1" "vault" {
   metadata {
     name = "${kubernetes_service_account_v1.vault.default_secret_name}"

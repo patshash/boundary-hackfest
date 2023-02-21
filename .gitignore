@@ -1,5 +1,7 @@
 .terraform/
 files/k8s
+files/boundary/boundary-deployment.yaml
+json
 generated/*
 .envrc
 kubeconfig

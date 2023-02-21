@@ -20,10 +20,16 @@ variable "project_id" {
 variable "vault_credstore_id" {
   type = string
 }
-variable "managed_group_analyst_id" {
+variable "auth0_managed_group_analyst_id" {
   type = string
 }
-variable "managed_group_admin_id" {
+variable "auth0_managed_group_admin_id" {
+  type = string
+}
+variable "okta_managed_group_analyst_id" {
+  type = string
+}
+variable "okta_managed_group_admin_id" {
   type = string
 }
 variable "rds_username" {
@@ -33,5 +39,14 @@ variable "rds_password" {
   type = string
 }
 variable "worker_ip" {
+  type = string
+}
+variable "worker_egress_security_group_id" {
+  type = string
+}
+variable "worker_ingress_security_group_id" {
+  type = string
+}
+variable "vault_security_group_id" {
   type = string
 }

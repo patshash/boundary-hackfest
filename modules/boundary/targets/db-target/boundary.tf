@@ -19,38 +19,6 @@ resource "boundary_host_set_static" "db_servers" {
   host_ids        = [boundary_host_static.db_servers.id]
 }
 
-resource "boundary_target" "postgres_admin" {
-  type                     = "tcp"
-  name                     = "postgres_admin"
-  description              = "Postgres DB target for Admin"
-  scope_id                 = var.project_id
-  session_connection_limit = -1
-  default_port             = 5432
-  worker_filter            = "\"worker\" in \"/tags/type\""
-  host_source_ids = [
-    boundary_host_set_static.db_servers.id
-  ]
-  brokered_credential_source_ids = [
-    boundary_credential_library_vault.vault_db_admin.id
-  ]
-}
-
-resource "boundary_target" "postgres_analyst" {
-  type                     = "tcp"
-  name                     = "postgres_analyst"
-  description              = "Postgres DB target for Analyst"
-  scope_id                 = var.project_id
-  session_connection_limit = -1
-  default_port             = 5432
-  worker_filter            = "\"worker\" in \"/tags/type\""
-  host_source_ids = [
-    boundary_host_set_static.db_servers.id
-  ]
-  brokered_credential_source_ids = [
-    boundary_credential_library_vault.vault_db_analyst.id
-  ]
-}
-
 resource "boundary_credential_library_vault" "vault_db_admin" {
   name                = "vault-db-admin"
   description         = "Vault Postgres DB secret for Admin role"
@@ -79,7 +47,7 @@ resource "boundary_role" "db_analyst" {
     "id=*;type=target;actions=list,no-op",
     "id=*;type=auth-token;actions=list,read:self,delete:self"
   ]
-  principal_ids = [var.managed_group_analyst_id]
+  principal_ids = [var.auth0_managed_group_analyst_id, var.okta_managed_group_analyst_id]
 }
 
 
@@ -93,5 +61,42 @@ resource "boundary_role" "db_admin" {
     "id=*;type=target;actions=list,no-op",
     "id=*;type=auth-token;actions=list,read:self,delete:self"
   ]
-  principal_ids = [var.managed_group_admin_id]
+  principal_ids = [var.auth0_managed_group_admin_id, var.okta_managed_group_admin_id]
+}
+
+
+resource "boundary_target" "postgres_admin" {
+  type                     = "tcp"
+  name                     = "postgres_admin"
+  description              = "Postgres DB target for Admin"
+  scope_id                 = var.project_id
+  session_connection_limit = -1
+  default_port             = 5432
+  ingress_worker_filter    = "\"ingress\" in \"/tags/type\""
+  egress_worker_filter     = "\"egress\" in \"/tags/type\""
+
+  host_source_ids = [
+    boundary_host_set_static.db_servers.id
+  ]
+  brokered_credential_source_ids = [
+    boundary_credential_library_vault.vault_db_admin.id
+  ]
+}
+
+resource "boundary_target" "postgres_analyst" {
+  type                     = "tcp"
+  name                     = "postgres_analyst"
+  description              = "Postgres DB target for Analyst"
+  scope_id                 = var.project_id
+  session_connection_limit = -1
+  default_port             = 5432
+  ingress_worker_filter    = "\"ingress\" in \"/tags/type\""
+  egress_worker_filter     = "\"egress\" in \"/tags/type\""
+
+  host_source_ids = [
+    boundary_host_set_static.db_servers.id
+  ]
+  brokered_credential_source_ids = [
+    boundary_credential_library_vault.vault_db_analyst.id
+  ]
 }

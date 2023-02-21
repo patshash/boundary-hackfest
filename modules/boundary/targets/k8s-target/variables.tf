@@ -23,10 +23,16 @@ variable "vault_credstore_id" {
 variable "static_db_creds_id" {
   type = string
 }
-variable "managed_group_analyst_id" {
+variable "auth0_managed_group_analyst_id" {
   type = string
 }
-variable "managed_group_admin_id" {
+variable "auth0_managed_group_admin_id" {
+  type = string
+}
+variable "okta_managed_group_analyst_id" {
+  type = string
+}
+variable "okta_managed_group_admin_id" {
   type = string
 }
 variable "project_id" {

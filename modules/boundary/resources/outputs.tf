@@ -6,12 +6,20 @@ output "org_id" {
   value = boundary_scope.org.id
 }
 
-output "managed_group_analyst_id" {
-  value = boundary_managed_group.db_analyst.id
+output "auth0_managed_group_analyst_id" {
+  value = boundary_managed_group.auth0_db_analyst.id
 }
 
-output "managed_group_admin_id" {
-  value = boundary_managed_group.db_admin.id
+output "auth0_managed_group_admin_id" {
+  value = boundary_managed_group.auth0_db_admin.id
+}
+
+output "okta_managed_group_analyst_id" {
+  value = boundary_managed_group.okta_db_analyst.id
+}
+
+output "okta_managed_group_admin_id" {
+  value = boundary_managed_group.okta_db_admin.id
 }
 
 output "static_credstore_id" {

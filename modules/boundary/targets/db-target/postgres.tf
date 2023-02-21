@@ -16,33 +16,10 @@ resource "aws_db_instance" "this" {
   username               = var.rds_username
   password               = var.rds_password
   db_subnet_group_name   = aws_db_subnet_group.this.name
-  vpc_security_group_ids = [aws_security_group.rds.id]
+  vpc_security_group_ids = [module.rds-inbound-sg.security_group_id]
   parameter_group_name   = aws_db_parameter_group.this.name
   publicly_accessible    = true
   skip_final_snapshot    = true
-}
-
-resource "aws_security_group" "rds" {
-  name   = "${var.deployment_id}-rds-sg"
-  vpc_id = var.vpc_id
-
-  ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = [var.vpc_cidr]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.deployment_id}-rds-sg"
-  }
 }
 
 resource "aws_db_parameter_group" "this" {
@@ -88,7 +65,7 @@ resource "null_resource" "create-db" {
     type        = "ssh"
     user        = "ubuntu"
     host        = var.worker_ip
-    private_key = trimspace(file("${path.root}/generated/ssh-key"))
+    private_key = trimspace(file("${path.root}/generated/ssh_key"))
   }
-}
 
+}

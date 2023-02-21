@@ -18,8 +18,12 @@ output "auth0_client" {
   sensitive = true
 }
 
-output "worker_ip" {
-  value = module.boundary-cluster.worker_ip
+output "ingress_worker_ip" {
+  value = module.boundary-cluster.ingress_worker_ip
+}
+
+output "egress_worker_ip" {
+  value = module.boundary-cluster.egress_worker_ip
 }
 
 output "vault_ip" {
