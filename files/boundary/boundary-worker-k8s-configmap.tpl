@@ -5,6 +5,11 @@ listener "tcp" {
   address = "0.0.0.0:9202"
 }
 
+listener "tcp" {
+  purpose = "ops"
+  tls_disable = true
+}
+
 worker {
   public_addr = "${public_addr}"
   auth_storage_path = "/home/boundary/worker1"
