@@ -6,6 +6,12 @@ listener "tcp" {
     purpose = "proxy"
     tls_disable = true
 }
+
+listener "tcp" {
+    address = "${private_ip}:9203"
+    purpose = "ops"
+    tls_disable = true
+}
   
 worker {
     # Name attr must be unique

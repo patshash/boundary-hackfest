@@ -37,27 +37,27 @@ resource "null_resource" "create-db" {
     inline = [
       /* "sudo apt-get install -y postgresql-client", */
       /* "sleep 10", */
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'CREATE ROLE ANALYST NOINHERIT;'",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'GRANT CONNECT ON DATABASE POSTGRES TO ANALYST;'",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'GRANT USAGE ON SCHEMA PUBLIC TO ANALYST;'",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'GRANT SELECT ON ALL TABLES IN SCHEMA PUBLIC TO ANALYST;'",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'GRANT USAGE ON ALL SEQUENCES IN SCHEMA PUBLIC TO ANALYST;'",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA PUBLIC TO ANALYST;'",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'CREATE ROLE DBA NOINHERIT;'",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'GRANT CONNECT ON DATABASE POSTGRES TO DBA;'",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'GRANT ALL PRIVILEGES ON DATABASE POSTGRES TO DBA;'",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA PUBLIC TO DBA;'",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c \"CREATE TABLE COUNTRY(CODE VARCHAR, NAME VARCHAR);\"",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c \"INSERT INTO COUNTRY VALUES('SG', 'SINGAPORE');\"",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'CREATE ROLE ANALYST NOINHERIT;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'GRANT CONNECT ON DATABASE POSTGRES TO ANALYST;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'GRANT USAGE ON SCHEMA PUBLIC TO ANALYST;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'GRANT SELECT ON ALL TABLES IN SCHEMA PUBLIC TO ANALYST;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'GRANT USAGE ON ALL SEQUENCES IN SCHEMA PUBLIC TO ANALYST;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA PUBLIC TO ANALYST;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'CREATE ROLE DBA NOINHERIT;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'GRANT CONNECT ON DATABASE POSTGRES TO DBA;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'GRANT ALL PRIVILEGES ON DATABASE POSTGRES TO DBA;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA PUBLIC TO DBA;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c \"CREATE TABLE COUNTRY(CODE VARCHAR, NAME VARCHAR);\"",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c \"INSERT INTO COUNTRY VALUES('SG', 'SINGAPORE');\"",
       "sleep 5",
     ]
   }
 
   provisioner "remote-exec" {
     inline = [
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'GRANT SELECT ON ALL TABLES IN SCHEMA PUBLIC TO ANALYST;'",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'GRANT ALL PRIVILEGES ON DATABASE POSTGRES TO DBA;'",
-      "PGPASSWORD=postgres psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA PUBLIC TO DBA;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'GRANT SELECT ON ALL TABLES IN SCHEMA PUBLIC TO ANALYST;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'GRANT ALL PRIVILEGES ON DATABASE POSTGRES TO DBA;'",
+      "PGPASSWORD=${var.rds_password} psql -h ${aws_db_instance.this.address} -U ${aws_db_instance.this.username} postgres -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA PUBLIC TO DBA;'",
     ]
   }
 
