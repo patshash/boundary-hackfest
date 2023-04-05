@@ -32,6 +32,7 @@ resource "boundary_role" "default_org" {
   grant_scope_id = boundary_scope.org.id
   grant_strings = [
     "id=${boundary_scope.project.id};actions=read",
+    "id={{.User.Id}};actions=read",
     "id=*;type=auth-token;actions=list,read:self,delete:self"
   ]
   principal_ids = [boundary_managed_group.auth0_db_analyst.id, boundary_managed_group.auth0_db_admin.id,
