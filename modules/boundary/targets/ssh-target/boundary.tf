@@ -46,7 +46,7 @@ resource "boundary_role" "linux_admin" {
   name           = "linux_admin"
   description    = "Access to Linux hosts for admin role"
   scope_id       = var.org_id
-  grant_scope_ids = [var.project_id, children]
+  grant_scope_ids = [var.project_id, "children"]
   grant_strings = [
     "ids=${boundary_target.linux_admin.id};actions=read,authorize-session",
     "ids=*;type=target;actions=list,no-op",

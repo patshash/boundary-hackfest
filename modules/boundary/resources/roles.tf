@@ -29,7 +29,7 @@ resource "boundary_role" "org_anon_listing" {
 resource "boundary_role" "default_org" {
   name           = "default_org"
   scope_id       = boundary_scope.global.id
-  grant_scope_id = boundary_scope.org.id
+  grant_scope_ids = [boundary_scope.org.id, "descendants"]
   grant_strings = [
     "ids=${boundary_scope.project.id};actions=read",
     "ids={{.User.Id}};actions=read",
@@ -43,7 +43,7 @@ resource "boundary_role" "default_org" {
 resource "boundary_role" "default_project" {
   name           = "default_project"
   scope_id       = boundary_scope.org.id
-  grant_scope_id = boundary_scope.project.id
+  grant_scope_ids = [boundary_scope.project.id]
   grant_strings = [
     "ids=*;type=session;actions=list,no-op",
     "ids=*;type=session;actions=read:self,cancel:self",

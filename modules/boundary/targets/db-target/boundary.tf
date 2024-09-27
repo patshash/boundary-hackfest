@@ -41,7 +41,7 @@ resource "boundary_role" "db_analyst" {
   name           = "db_analyst"
   description    = "Access to DB for analyst role"
   scope_id       = var.org_id
-  grant_scope_ids = [var.project_id, children]
+  grant_scope_ids = [var.project_id, "children"]
   grant_strings = [
     "ids=${boundary_target.postgres_analyst.id};actions=read,authorize-session",
     "ids=*;type=target;actions=list,no-op",
@@ -55,7 +55,7 @@ resource "boundary_role" "db_admin" {
   name           = "db_admin"
   description    = "Access to DB for dba role"
   scope_id       = var.org_id
-  grant_scope_ids = [var.project_id, children]
+  grant_scope_ids = [var.project_id, "children"]
   grant_strings = [
     "ids=${boundary_target.postgres_admin.id};actions=read,authorize-session",
     "ids=*;type=target;actions=list,no-op",

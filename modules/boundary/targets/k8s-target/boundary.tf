@@ -92,7 +92,7 @@ resource "boundary_role" "db_admin" {
   name           = "eks_db_admin"
   description    = "Access to EKS DB for dba role"
   scope_id       = var.org_id
-  grant_scope_ids = [var.project_id, children]
+  grant_scope_ids = [var.project_id, "children"]
   grant_strings = [
     "ids=${boundary_target.eks_postgres_admin.id};actions=read,authorize-session",
     "ids=*;type=target;actions=list,no-op",
@@ -105,7 +105,7 @@ resource "boundary_role" "eks_readonly" {
   name           = "eks_readonly"
   description    = "Access to EKS for Developers"
   scope_id       = var.org_id
-  grant_scope_ids = [var.project_id, children]
+  grant_scope_ids = [var.project_id, "children"]
   grant_strings = [
     "ids=${boundary_target.eks_readonly.id};actions=read,authorize-session",
     "ids=*;type=target;actions=list,no-op",
