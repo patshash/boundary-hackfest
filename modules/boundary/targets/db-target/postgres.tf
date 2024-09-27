@@ -12,7 +12,7 @@ resource "aws_db_instance" "this" {
   instance_class         = "db.t3.micro"
   allocated_storage      = 10
   engine                 = "postgres"
-  engine_version         = "13.7"
+  engine_version         = "13.11"
   username               = var.rds_username
   password               = var.rds_password
   db_subnet_group_name   = aws_db_subnet_group.this.name

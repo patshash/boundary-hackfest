@@ -6,6 +6,10 @@ variable "hcp_client_secret" {
   type = string
 }
 
+variable "hcp_project_id" {
+  type = string
+}
+
 variable "hcp_boundary_admin" {
   type = string
 }

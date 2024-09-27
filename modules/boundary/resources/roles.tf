@@ -19,9 +19,9 @@ resource "boundary_role" "org_anon_listing" {
   scope_id = boundary_scope.org.id
   name     = "org_anon"
   grant_strings = [
-    "id=*;type=auth-method;actions=list,authenticate",
+    "ids=*;type=auth-method;actions=list,authenticate",
     "type=scope;actions=list",
-    "id={{account.id}};actions=read,change-password"
+    "ids={{account.id}};actions=read,change-password"
   ]
   principal_ids = ["u_anon"]
 }
@@ -31,9 +31,9 @@ resource "boundary_role" "default_org" {
   scope_id       = boundary_scope.global.id
   grant_scope_id = boundary_scope.org.id
   grant_strings = [
-    "id=${boundary_scope.project.id};actions=read",
-    "id={{.User.Id}};actions=read",
-    "id=*;type=auth-token;actions=list,read:self,delete:self"
+    "ids=${boundary_scope.project.id};actions=read",
+    "ids={{.User.Id}};actions=read",
+    "ids=*;type=auth-token;actions=list,read:self,delete:self"
   ]
   principal_ids = [boundary_managed_group.auth0_db_analyst.id, boundary_managed_group.auth0_db_admin.id,
     boundary_managed_group.okta_db_analyst.id, boundary_managed_group.okta_db_admin.id
@@ -45,8 +45,8 @@ resource "boundary_role" "default_project" {
   scope_id       = boundary_scope.org.id
   grant_scope_id = boundary_scope.project.id
   grant_strings = [
-    "id=*;type=session;actions=list,no-op",
-    "id=*;type=session;actions=read:self,cancel:self",
+    "ids=*;type=session;actions=list,no-op",
+    "ids=*;type=session;actions=read:self,cancel:self",
   ]
   principal_ids = [boundary_managed_group.auth0_db_analyst.id, boundary_managed_group.auth0_db_admin.id,
     boundary_managed_group.okta_db_analyst.id, boundary_managed_group.okta_db_admin.id

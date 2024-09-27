@@ -10,6 +10,11 @@ variable "hcp_boundary_password" {
   type = string
 }
 
+variable "hcp_boundary_tier" {
+  type = string
+  default = "Standard"
+}
+
 variable "auth0_domain" {
   type = string
 }

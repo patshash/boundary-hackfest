@@ -6,11 +6,11 @@ terraform {
     }
     boundary = {
       source  = "hashicorp/boundary"
-      version = "1.1.4"
+      version = "1.1.15"
     }
     hcp = {
       source  = "hashicorp/hcp"
-      version = "0.54.0"
+      version = "0.96.0"
     }
     vault = {
       source  = "hashicorp/vault"
@@ -22,6 +22,7 @@ terraform {
 provider "hcp" {
   client_id     = var.hcp_client_id
   client_secret = var.hcp_client_secret
+  project_id = var.hcp_project_id
 }
 
 provider "aws" {

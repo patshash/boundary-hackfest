@@ -22,11 +22,11 @@ resource "boundary_role" "windows_admin" {
   name           = "windows_admin"
   description    = "Access to Windows hosts for admin role"
   scope_id       = var.org_id
-  grant_scope_id = var.project_id
+  grant_scope_ids = [var.project_id, children]
   grant_strings = [
-    "id=${boundary_target.windows_admin.id};actions=read,authorize-session",
-    "id=*;type=target;actions=list,no-op",
-    "id=*;type=auth-token;actions=list,read:self,delete:self"
+    "ids=${boundary_target.windows_admin.id};actions=read,authorize-session",
+    "ids=*;type=target;actions=list,no-op",
+    "ids=*;type=auth-token;actions=list,read:self,delete:self"
   ]
   principal_ids = [var.auth0_managed_group_admin_id, var.okta_managed_group_admin_id]
 }
@@ -35,11 +35,11 @@ resource "boundary_role" "windows_analyst" {
   name           = "windows_analyst"
   description    = "Access to Windows hosts for analyst role"
   scope_id       = var.org_id
-  grant_scope_id = var.project_id
+  grant_scope_ids = [var.project_id, children]
   grant_strings = [
-    "id=${boundary_target.windows_analyst.id};actions=read,authorize-session",
-    "id=*;type=target;actions=list,no-op",
-    "id=*;type=auth-token;actions=list,read:self,delete:self"
+    "ids=${boundary_target.windows_analyst.id};actions=read,authorize-session",
+    "ids=*;type=target;actions=list,no-op",
+    "ids=*;type=auth-token;actions=list,read:self,delete:self"
   ]
   principal_ids = [var.auth0_managed_group_analyst_id, var.okta_managed_group_analyst_id]
 }
